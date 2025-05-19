@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Validator;
 
 trait ApiResponse
 {
@@ -27,5 +28,10 @@ trait ApiResponse
         ];
 
         return response()->json($response, $code);
+    }
+
+    public function validationError(Validator $validator): JsonResponse
+    {
+        return $this->sendError('Validation Error.', $validator->errors());
     }
 }

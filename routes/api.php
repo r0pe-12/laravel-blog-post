@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\CheckToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,11 @@ Route::group(['middleware' => CheckToken::class], function () {
         Route::post('/login', 'login');
         Route::post('/register', 'register');
     });
+});
+
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::apiResource('/categories', CategoryController::class);
 });
 
 
