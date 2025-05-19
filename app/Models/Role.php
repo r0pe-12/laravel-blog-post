@@ -12,4 +12,26 @@ class Role extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public static function guest()
+    {
+        $role = Role::findOrNew(2);
+        if (!$role->id) {
+            $role->id = 2;
+            $role->name = 'Guest';
+            $role->save();
+        }
+        return $role;
+    }
+
+    public static function admin()
+    {
+        $role = Role::findOrNew(1);
+        if (!$role->id) {
+            $role->id = 1;
+            $role->name = 'Administrator';
+            $role->save();
+        }
+        return $role;
+    }
 }
