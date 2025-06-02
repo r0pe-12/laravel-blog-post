@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Traits\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, AuthorizesRequests;
 
     /**
      * Store a newly created resource in storage.
@@ -16,6 +17,7 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         //
+        $this->authorize('create', Comment::class);
         $validator = \Validator::make($request->all(), [
             'comment_id' => ['nullable', 'integer', 'exists:comments,id'],
             'post_id' => ['required', 'integer', 'exists:posts,id'],
@@ -43,6 +45,7 @@ class CommentController extends Controller
     public function update(Request $request, Comment $comment)
     {
         //
+        $this->authorize('update', $comment);
         $validator = \Validator::make($request->all(), [
             'content' => ['required', 'string'],
         ]);
@@ -63,6 +66,7 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         //
+        $this->authorize('delete', $comment);
         $comment->delete();
         return $this->sendResponse([], 'Comment deleted successfully.');
     }
