@@ -9,12 +9,13 @@ use App\Http\Resources\Posts\PostResource;
 use App\Models\Media;
 use App\Models\Post;
 use App\Traits\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class PostController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, AuthorizesRequests;
 
     /**
      * Display a listing of the resource.
@@ -22,6 +23,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         //
+        $this->authorize('viewAny', Post::class);
         $validated = $request->validate([
             'user_id' => ['nullable', 'integer', 'exists:users,id'],
         ]);
@@ -39,6 +41,7 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
         //
+        $this->authorize('create', Post::class);
         $data = $request->validated();
         $post = Post::create([
                 ...Arr::except($data, ['categories', 'media'])
@@ -60,6 +63,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
         //
+        $this->authorize('view', $post);
         return $this->sendResponse(new PostResource($post));
     }
 
@@ -68,6 +72,7 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
+        $this->authorize('update', $post);
         $data = $request->validated();
         $post->update(Arr::except($data, ['categories', 'media']));
 
@@ -88,6 +93,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+        $this->authorize('delete', $post);
         $post->update(['published' => false]);
         return $this->sendResponse([], 'Post deleted successfully.');
     }

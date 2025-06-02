@@ -13,6 +13,17 @@ class Role extends Model
         return $this->hasMany(User::class);
     }
 
+    public static function regular_user()
+    {
+        $role = Role::findOrNew(3);
+        if (!$role->id) {
+            $role->id = 3;
+            $role->name = 'User';
+            $role->save();
+        }
+        return $role;
+    }
+
     public static function guest()
     {
         $role = Role::findOrNew(2);
