@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Middleware\CheckToken;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ Route::group(['middleware' => CheckToken::class], function () {
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('/categories', CategoryController::class);
     Route::apiResource('/posts', PostController::class);
+    Route::apiResource('/comments', CommentController::class)->only(['store', 'update', 'destroy']);
 });
 
 
