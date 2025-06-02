@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostController;
 use App\Http\Middleware\CheckToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ Route::group(['middleware' => CheckToken::class], function () {
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('/categories', CategoryController::class);
+    Route::apiResource('/posts', PostController::class);
 });
 
 
